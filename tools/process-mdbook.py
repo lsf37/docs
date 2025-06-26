@@ -6,6 +6,7 @@
 # Process mdbook .md files to
 #  - execute `{{#include "path/to/file.md"}}` directives
 #  - convert tab directives Jekyll includes used in the docsite
+#  - convert <details> to <details markdown="1">
 
 import os
 import re
@@ -53,6 +54,9 @@ def process_mdbook(input_file, output_dir):
     # "{{#tab name="Linux" }}"
     pat = re.compile(r'{{#tab name="([^"]+)"[ ]*}}')
     content = re.sub(pat, r'{% include tab.html title="\1" %}', content)
+
+    # Convert <details> to <details markdown="1">
+    content = re.sub(r'<details>', r'<details markdown="1">', content)
 
     # Write processed content
     output_file = os.path.join(output_dir, os.path.basename(input_file))
